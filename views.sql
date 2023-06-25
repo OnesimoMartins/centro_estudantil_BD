@@ -7,7 +7,7 @@ SELECT
        a.id as CODIGO_ALUNO,
        a.nome as NOME,
        a.sobrenome as APELIDO
-       ,ROW_NUMBER() OVER (ORDER BY a.id) AS NUMERO 
+       ,ROW_NUMBER() OVER (ORDER BY pe.id) AS NUMERO 
 from aluno a
          inner join periodo_escolar_classe_aluno peca on peca.id_aluno = a.id
          inner join periodo_escolar pe on pe.id = peca.periodo_escolar_id
