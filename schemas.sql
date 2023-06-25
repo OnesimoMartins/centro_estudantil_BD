@@ -38,15 +38,16 @@ id_disciplina int references classe(id),
 periodo_escolar_id long references periodo_escolar(id)
 );
 
-create table lista_merito(
- id long primary key  auto_increment,
- numero long primary key  auto_increment,
- periodo_escolar_id long references periodo_escolar(id)
-);
+-- create table lista_merito(
+--  id long primary key  auto_increment,
+--  numero long primary key  auto_increment,
+--  periodo_escolar_id long references periodo_escolar(id)
+-- );
 
 create table grupo(
 id int primary key auto_increment,
-numero int not null
+numero int not null,
+classe_id int not null references classe(id)
 -- , periodo_escolar_id long references periodo_escolar(id) 
 );
 
@@ -58,7 +59,7 @@ create table aluno_grupo(
 );
 
 create table tipo_baixa(
- id int auto_increment,
+ id int primary key auto_increment,
  descricao varchar(100) null
 );
 
@@ -71,13 +72,14 @@ create table avaliacao(
  id_disciplina int not null references disciplina(id) ,
  id_aluno int references aluno(id),
  id_periodo_escolar long references periodo_escolar(id),
- trimestre int not null,
+ trimestre int not null , /*check trimestre e nota*/
  nota float not null
 );
 
-create table reprovacao_disciplina(
- id int auto_increment,
- id_disciplina int not null references disciplina(id),
- id_aluno int references aluno(id),
- id_periodo_escolar long references periodo_escolar(id)
-);
+
+-- create table reprovacao_disciplina(
+--  id int auto_increment,
+--  id_disciplina int not null references disciplina(id),
+--  id_aluno int references aluno(id),
+--  id_periodo_escolar long references periodo_escolar(id)
+-- );
