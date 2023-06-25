@@ -14,4 +14,22 @@ create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_perio
         END IF;
 
         RETURN str;
-    END
+    END;
+    
+    
+    
+drop function IS_ALUNO_REPETENTE;
+create function IS_ALUNO_REPETENTE(id_aluno int, id_periodo_escolar_atual int) returns tinyint(1)
+    reads sql data
+BEGIN
+    declare disciplinas boolean;
+
+    select count( distinct d.id) into disciplinas from avaliacao av
+                                        inner join disciplina d on d.id=av.id_disciplina
+#     where av.id_aluno=1 and av.id_periodo_escolar=1
+        where av.id_aluno=id_aluno and av.id_periodo_escolar=id_periodo_escolar_atual-1
+      and GET_DISCIPLINA_RESULT(d.id,1,1) = 'REPROVADO';
+
+    return disciplinas >1;
+END;
+
