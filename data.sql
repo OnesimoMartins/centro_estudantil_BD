@@ -13,3 +13,5 @@ insert into disciplina(nome) values
 insert into classe_disciplina(id_classe,id_disciplina,periodo_escolar_id) values 
 (1,1,1),(2,1,1),(3,1,1),(4,1,1),(5,1,1),
 (1,2,1),(1,3,1),(2,3,1),(4,3,1),(6,7,1),(6,6,1);
+
+insert into grupo(numero,periodo_escolar_id) values (1,1),(2,1),(3,1),(1,2),(2,2),(3,2);
