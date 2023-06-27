@@ -1,3 +1,7 @@
+drop function IS_ALUNO_REPETENTE;
+drop function GET_DISCIPLINA_RESULT;
+drop function FORMAT_PERIODO_ESCOLAR;
+
 create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_periodo_escolar int )
     returns varchar(20) READS SQL DATA
     BEGIN
@@ -33,3 +37,9 @@ BEGIN
     return disciplinas >1;
 END;
 
+create function FORMAT_PERIODO_ESCOLAR(data_inicio date, data_fim date) returns varchar(20) deterministic
+BEGIN
+    declare result varchar(20);
+    select CONCAT(year(data_inicio),'/',RIGHT((year(data_fim)),2) ) into result;
+    return result;
+END;
