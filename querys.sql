@@ -74,3 +74,23 @@ from avaliacao avaliacao
          inner join grupo g on g.id=ag.id_grupo
          inner join disciplina d on d.id=avaliacao.id_disciplina
 where   GET_DISCIPLINA_RESULT(d.id,al.id, pe.id) = 'REPROVADO' ;
+
+
+#8.	Lista, por grupo, dos alunos que causaram baixa
+select distinct
+    CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) as PERIODO_ESCOLAR
+              ,concat(c.numero,'a') as CLASSE
+              ,g.numero as GRUPO
+              ,al.nome as NOME
+              ,al.sobrenome as APELIDO
+              ,tb.descricao as BAIXA
+from aluno_baixa ab
+         inner join aluno al on ab.id_aluno= al.id
+         inner join tipo_baixa tb on tb.id= ab.id_baixa
+         inner join periodo_escolar_classe_aluno peca on peca.id_aluno = al.id
+         inner join periodo_escolar pe on pe.id = peca.periodo_escolar_id
+         inner join classe c on c.id = peca.id_classe
+         inner join aluno_grupo ag on ag.id_aluno=al.id
+         inner join grupo g on g.id=ag.id_grupo
+where   0=0;
+
