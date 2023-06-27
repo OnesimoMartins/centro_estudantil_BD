@@ -1,6 +1,7 @@
 drop function IS_ALUNO_REPETENTE;
 drop function GET_DISCIPLINA_RESULT;
 drop function FORMAT_PERIODO_ESCOLAR;
+drop function GET_NOTA_DISCIPLINA;
 
 create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_periodo_escolar int )
     returns varchar(20) READS SQL DATA
@@ -21,8 +22,7 @@ create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_perio
     END;
     
     
-    
-drop function IS_ALUNO_REPETENTE;
+
 create function IS_ALUNO_REPETENTE(id_aluno int, id_periodo_escolar_atual int) returns tinyint(1)
     reads sql data
 BEGIN
@@ -43,3 +43,18 @@ BEGIN
     select CONCAT(year(data_inicio),'/',RIGHT((year(data_fim)),2) ) into result;
     return result;
 END;
+
+
+
+create function GET_NOTA_DISCIPLINA( id_disciplina int, id_aluno int, id_periodo_escolar int )
+    returns float READS SQL DATA
+BEGIN
+
+    DECLARE resultado float;
+
+    select sum(av.nota)/3 into resultado from avaliacao av where av.id_aluno=id_aluno
+                                                             and av.id_disciplina=id_disciplina
+                                                             and av.id_periodo_escolar=id_periodo_escolar;
+    RETURN resultado;
+
+ END;

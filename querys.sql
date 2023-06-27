@@ -92,4 +92,5 @@ from aluno_baixa ab
          inner join classe c on c.id = peca.id_classe
          inner join aluno_grupo ag on ag.id_aluno=al.id
          inner join grupo g on g.id=ag.id_grupo
+
 where   0=0;  
