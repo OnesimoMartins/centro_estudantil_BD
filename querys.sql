@@ -65,9 +65,7 @@ select distinct CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) a
        ,g.numero as GRUPO
        ,al.id as CODIGO_ALUNO
        ,d.nome as DICIPLINA
-
 from avaliacao avaliacao
-
          inner join periodo_escolar_classe_aluno peca on peca.id_aluno = avaliacao.id_periodo_escolar
          inner join aluno al on al.id = avaliacao.id_aluno
          inner join periodo_escolar pe on pe.id = peca.periodo_escolar_id
@@ -75,5 +73,4 @@ from avaliacao avaliacao
          inner join aluno_grupo ag on ag.id_aluno=al.id and ag.periodo_escolar_id=pe.id
          inner join grupo g on g.id=ag.id_grupo
          inner join disciplina d on d.id=avaliacao.id_disciplina
-
 where   GET_DISCIPLINA_RESULT(d.id,al.id, pe.id) = 'REPROVADO' ;
