@@ -15,7 +15,7 @@ insert into aluno (nome,sobrenome,sexo) values
                                             ('Marilia','AG','F'),
                                             ('Nadia','Mendonca','F'),
                                             ('Ebora','Rafa','F'),
-
+											('Eugénio','Chimuco','M'),
                                             ('Edga','Felipe','F'),
                                             ('Nadio','GG','M');
 

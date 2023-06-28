@@ -97,18 +97,43 @@ from aluno_baixa ab
 
 where   0=0;  
 
-#9. Lista dos repetentes por grupo  #ERRADO
-SELECT DISTINCT FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) AS Periodo,
-       c.numero AS Classe,
-       g.numero AS NumeroGrupo,
-       al.nome AS Nome,
-       al.sobrenome AS Apelido
-FROM aluno al
-JOIN periodo_escolar_classe_aluno peca ON peca.id_aluno = al.id
-JOIN periodo_escolar pe ON pe.id = peca.periodo_escolar_id
-JOIN classe c ON c.id = peca.id_classe
-JOIN aluno_grupo ag ON ag.id_aluno = al.id AND ag.periodo_escolar_id = pe.id
-JOIN grupo g ON g.id = ag.id_grupo
-JOIN avaliacao av ON av.id_aluno = al.id AND av.id_periodo_escolar = pe.id
-WHERE GET_DISCIPLINA_RESULT(av.id_disciplina, al.id, pe.id) = 'REPROVADO'
-ORDER BY Periodo, Classe, NumeroGrupo;
+#4. Lista das médias finais obtidas pelos alunos em cada classe.
+SELECT 
+    CASE
+        WHEN trimestre = 1 THEN 'Trimestral'
+        WHEN trimestre = 2 THEN 'Semestral'
+        WHEN trimestre = 3 THEN 'Anual'
+    END AS periodo,
+    pe.id AS periodo_escolar_id,
+    c.numero AS classe_numero,
+    g.numero AS grupo_numero,
+    ROW_NUMBER() OVER (PARTITION BY c.id, g.id, pe.id ORDER BY a.nome, a.sobrenome) AS numero_lista,
+    CONCAT(a.nome, ' ', a.sobrenome) AS nome_completo,
+    AVG(av.nota) AS media_obtida
+FROM aluno a
+INNER JOIN aluno_grupo ag ON ag.id_aluno = a.id
+INNER JOIN grupo g ON g.id = ag.id_grupo
+INNER JOIN periodo_escolar pe ON pe.id = ag.periodo_escolar_id
+INNER JOIN classe c ON c.id = g.classe_id
+LEFT JOIN avaliacao av ON av.id_aluno = a.id AND av.id_periodo_escolar = pe.id
+GROUP BY pe.id, c.id, g.id, a.id
+ORDER BY pe.id, c.id, g.id, numero_lista;
+
+# 5.	Lista por ponderado
+SELECT 
+    pe.id AS periodo_escolar_id,
+    c.numero AS classe_numero,
+    NULL AS grupo_numero,
+    ROW_NUMBER() OVER (PARTITION BY pe.id, c.id ORDER BY AVG(av.nota) DESC) AS numero_lista_merito,
+    CONCAT(a.nome, ' ', a.sobrenome) AS nome_completo,
+    AVG(av.nota) AS media_acumulada,
+    ROW_NUMBER() OVER (PARTITION BY pe.id, c.id ORDER BY a.nome, a.sobrenome) AS numero_lista,
+    a.sexo
+FROM aluno a
+INNER JOIN aluno_grupo ag ON ag.id_aluno = a.id
+INNER JOIN grupo g ON g.id = ag.id_grupo
+INNER JOIN periodo_escolar pe ON pe.id = ag.periodo_escolar_id
+INNER JOIN classe c ON c.id = g.classe_id
+LEFT JOIN avaliacao av ON av.id_aluno = a.id AND av.id_periodo_escolar = pe.id
+GROUP BY pe.id, c.id, a.id
+ORDER BY pe.id, c.id, numero_lista_merito;
