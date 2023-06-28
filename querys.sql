@@ -6,7 +6,7 @@ select * from classe;
 
 
 -- 1.	Lista dos alunos por grupo 
-select CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) as PERIODO_ESCOLAR,
+select FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) as PERIODO_ESCOLAR,
        concat(c.numero,'a') as CLASSE,
        g.numero as GRUPO,
        a.id as CODIGO_ALUNO,
@@ -18,21 +18,21 @@ from aluno a
          inner join aluno_grupo ag on ag.id_aluno=a.id and ag.periodo_escolar_id=pe.id
          inner join grupo g on g.id=ag.id_grupo
          inner join classe c on c.id=peca.id_classe
-where pe.id=2;
+where 0=0;
 
 -- 2.	Lista das disciplinas leccionadas em cada classe
 select c.numero as classe , d.nome as disciplina ,
-CONCAT(year(p.data_inicio),'/',RIGHT((year(p.data_fim)),2) ) as PERIODO_ESCOLAR 
+FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) as PERIODO_ESCOLAR 
 from classe_disciplina  cd
 inner join disciplina d on d.id= cd.id_disciplina
 inner join classe c on c.id=cd.id_classe
-inner join periodo_escolar p on cd.periodo_escolar_id= p.id
-where p.id=1 and c.numero=1;
+inner join periodo_escolar pe on cd.periodo_escolar_id= pe.id
+where 0=0 order by pe.id, c.numero;
 
 
--- 3.	Lista dos alunos por grupo 
+-- 	3.	Lista das avaliações por grupo em cada disciplina
 
-select distinct CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) as PERIODO_ESCOLAR
+select distinct FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) as PERIODO_ESCOLAR
        ,concat(c.numero,'a') as CLASSE
        ,g.numero as GRUPO
        ,d.nome as DISCIPLINA
@@ -53,7 +53,7 @@ from avaliacao avaliacao
 
          inner join disciplina d on d.id=avaliacao.id_disciplina
 
-where pe.id=1 and al.id=1;
+where 0=0;
 
 -- 4.	Lista dos alunos por grupo 
 
@@ -62,7 +62,7 @@ where pe.id=1 and al.id=1;
 
 
 # 7.	Lista dos alunos Reprovados por grupo
-select distinct CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) as PERIODO_ESCOLAR
+select distinct FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) as PERIODO_ESCOLAR
        ,concat(c.numero,'a') as CLASSE
        ,g.numero as GRUPO
        ,al.id as CODIGO_ALUNO
@@ -80,7 +80,7 @@ where   GET_DISCIPLINA_RESULT(d.id,al.id, pe.id) = 'REPROVADO' ;
 
 #8.	Lista, por grupo, dos alunos que causaram baixa
 select distinct
-    CONCAT(year(pe.data_inicio),'/',RIGHT((year(pe.data_fim)),2) ) as PERIODO_ESCOLAR
+    FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) as PERIODO_ESCOLAR
               ,concat(c.numero,'a') as CLASSE
               ,g.numero as GRUPO
               ,al.nome as NOME
@@ -97,8 +97,8 @@ from aluno_baixa ab
 
 where   0=0;  
 
-#9. Lista dos repetentes por grupo
-SELECT DISTINCT CONCAT(YEAR(pe.data_inicio), '/', RIGHT(YEAR(pe.data_fim), 2)) AS Periodo,
+#9. Lista dos repetentes por grupo  #ERRADO
+SELECT DISTINCT FORMAT_PERIODO_ESCOLAR(pe.data_inicio,pe.data_fim) AS Periodo,
        c.numero AS Classe,
        g.numero AS NumeroGrupo,
        al.nome AS Nome,
@@ -112,5 +112,3 @@ JOIN grupo g ON g.id = ag.id_grupo
 JOIN avaliacao av ON av.id_aluno = al.id AND av.id_periodo_escolar = pe.id
 WHERE GET_DISCIPLINA_RESULT(av.id_disciplina, al.id, pe.id) = 'REPROVADO'
 ORDER BY Periodo, Classe, NumeroGrupo;
-
-
