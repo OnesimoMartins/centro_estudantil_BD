@@ -1,3 +1,5 @@
+use centro_estudantil;
+
 select * from classe_disciplina;
 select * from classe;
 
@@ -94,3 +96,21 @@ from aluno_baixa ab
          inner join grupo g on g.id=ag.id_grupo
 
 where   0=0;  
+
+#9. Lista dos repetentes por grupo
+SELECT DISTINCT CONCAT(YEAR(pe.data_inicio), '/', RIGHT(YEAR(pe.data_fim), 2)) AS Periodo,
+       c.numero AS Classe,
+       g.numero AS NumeroGrupo,
+       al.nome AS Nome,
+       al.sobrenome AS Apelido
+FROM aluno al
+JOIN periodo_escolar_classe_aluno peca ON peca.id_aluno = al.id
+JOIN periodo_escolar pe ON pe.id = peca.periodo_escolar_id
+JOIN classe c ON c.id = peca.id_classe
+JOIN aluno_grupo ag ON ag.id_aluno = al.id AND ag.periodo_escolar_id = pe.id
+JOIN grupo g ON g.id = ag.id_grupo
+JOIN avaliacao av ON av.id_aluno = al.id AND av.id_periodo_escolar = pe.id
+WHERE GET_DISCIPLINA_RESULT(av.id_disciplina, al.id, pe.id) = 'REPROVADO'
+ORDER BY Periodo, Classe, NumeroGrupo;
+
+

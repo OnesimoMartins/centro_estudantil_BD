@@ -66,3 +66,4 @@ insert into avaliacao(id_disciplina,id_aluno,id_periodo_escolar,trimestre,nota) 
                                                                                     (2,1,1,1,10), (2,1,1,2,10), (2,1,1,3,10),
                                                                                     (3,1,1,1,3), (3,1,1,2,2), (3,1,1,3,0);
 
+insert into reprovacao( id_aluno,id_periodo_escolar) values (1,1),(2,1),(3,1) ;
