@@ -18,7 +18,8 @@ create table classe (
 create table periodo_escolar(
                                 id int primary key auto_increment,
                                 data_inicio date not null,
-                                data_fim date not null
+                                data_fim date not null,
+                                qtd_vagas int not null
 );
 
 create table periodo_escolar_classe_aluno(
@@ -69,4 +70,10 @@ create table avaliacao(
                           nota float not null,
                           check (nota>=0 and nota <=10),
                           check (trimestre>=1 and trimestre<=3)
+);
+
+create table reprovacao(
+                          id int primary key auto_increment,
+                          id_aluno int not null references aluno(id),
+                          id_periodo_escolar int not null references periodo_escolar(id)
 );
