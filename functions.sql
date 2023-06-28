@@ -1,8 +1,11 @@
-drop function IS_ALUNO_REPETENTE;
-drop function GET_DISCIPLINA_RESULT;
-drop function FORMAT_PERIODO_ESCOLAR;
-drop function GET_NOTA_DISCIPLINA;
+use centro_estudantil;
 
+drop function if exists IS_ALUNO_REPETENTE;
+drop function if exists GET_DISCIPLINA_RESULT;
+drop function if exists FORMAT_PERIODO_ESCOLAR;
+drop function if exists GET_NOTA_DISCIPLINA;
+
+DELIMITER //
 create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_periodo_escolar int )
     returns varchar(20) READS SQL DATA
     BEGIN
@@ -19,10 +22,11 @@ create function GET_DISCIPLINA_RESULT( id_disciplina int, id_aluno int, id_perio
         END IF;
 
         RETURN str;
-    END;
+    END //
+DELIMITER ;
     
     
-
+DELIMITER //
 create function IS_ALUNO_REPETENTE(id_aluno int, id_periodo_escolar_atual int) returns tinyint(1)
     reads sql data
 BEGIN
@@ -35,17 +39,19 @@ BEGIN
       and GET_DISCIPLINA_RESULT(d.id,1,1) = 'REPROVADO';
 
     return disciplinas >1;
-END;
+END //
+DELIMITER ;
 
+DELIMITER //
 create function FORMAT_PERIODO_ESCOLAR(data_inicio date, data_fim date) returns varchar(20) deterministic
 BEGIN
     declare result varchar(20);
     select CONCAT(year(data_inicio),'/',RIGHT((year(data_fim)),2) ) into result;
     return result;
-END;
+END //
+DELIMITER ;
 
-
-
+DELIMITER //
 create function GET_NOTA_DISCIPLINA( id_disciplina int, id_aluno int, id_periodo_escolar int )
     returns float READS SQL DATA
 BEGIN
@@ -57,4 +63,5 @@ BEGIN
                                                              and av.id_periodo_escolar=id_periodo_escolar;
     RETURN resultado;
 
- END;
+ END //
+DELIMITER ;
