@@ -19,11 +19,10 @@ insert into aluno (nome,sobrenome,sexo) values
                                             ('Edga','Felipe','F'),
                                             ('Nadio','GG','M');
 
-insert into periodo_escolar(data_inicio,data_fim) values
-                                                      ('2020-01-09','2021-01-09'),
-                                                      ('2021-01-09','2022-01-09'),
-                                                      ('2022-01-09','2023-01-09'),
-                                                      ('2023-01-09','2024-01-09');
+insert into periodo_escolar(data_inicio,data_fim,qtd_vagas) values
+                                                      ('2020-01-09','2021-01-09',10),
+                                                      ('2021-01-09','2022-01-09',8);
+                                                      
 insert into periodo_escolar_classe_aluno(id_classe,id_aluno,periodo_escolar_id)
 values (1,1,1),(1,2,1),(1,3,1),(1,4,1),(1,11,1)  ,  (2,1,2),(2,2,2),(2,3,2),(1,4,2),(2,12,2);
 
